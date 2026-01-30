@@ -1,24 +1,20 @@
 # 🎙️ VoiceFlow: Production-Grade AI Speech-to-Text Platform
 
-VoiceFlow is a high-performance, full-stack application engineered for real-time speech transcription, live translation, and intelligent analytics. Built on **Azure Cognitive Services** and **OpenAI**, this platform delivers sub-second latency for live dictation and high-fidelity text processing, tailored for professional meetings, lectures, and enterprise documentation.
+VoiceFlow is a high-performance, full-stack application engineered for real-time speech transcription, live translation, and intelligent analytics. Built with a **Hybrid AI Architecture**, this platform intelligently toggles between **Azure Cognitive Services** for cloud-heavy tasks and browser-native processing for low-latency, offline-capable transcription.
 
----
-
-## 🌟 Core Technical Features
-
-- **⚡ Real-time Stream Transcription**: Low-latency, WebSocket-driven speech recognition using the **Azure Speech SDK**.
-- **🌍 Instant Multi-lingual Translation**: Real-time translation layer (Hindi, Spanish, French, German, etc.) processed simultaneously with transcription.
-- **🤖 GPT-Driven Summarization**: Deep-learning based summarization using **OpenAI's GPT-3.5-Turbo** to extract key action items and bulleted highlights.
-- **🔐 Professional Security & Data Persistence**: Secure user session management and historical data persistence via **SQLAlchemy** and **Flask-SocketIO**.
+- **⚡ Hybrid Stream Transcription**: Smart switching between **Azure Speech SDK** and browser-native recognition to ensure 100% uptime and sub-second latency.
+- **🛡️ Intelligent Fail-Safe Mode**: Automatic detection of server/API disruptions with seamless local fallback to prevent transcription loss.
+- **🌍 Instant Multi-lingual Translation**: Real-time translation layer (Hindi, Spanish, French, German, etc.) processed simultaneously.
+- **🤖 GPT-Driven Summarization**: Deep-learning based summarization using **OpenAI's GPT-3.5-Turbo** to extract key action items.
+- **🔐 Enterprise-Grade Security**: Full user authentication system with session persistence and secure historical data storage.
 - **📊 Dynamic UI/UX**: Premium glassmorphic interface with real-time audio visualization using the **Web Audio API**.
-- **📄 Document Generation**: Integrated exports for recruiter-ready **PDF** and **Plain Text** reports.
 
 ---
 
 ## 🔗 Live Links
 
-- **Frontend (Live Demo)**: [https://azure-speech-ai-platform.vercel.app/](https://azure-speech-ai-platform.vercel.app/)
-- **Backend (API Service)**: [https://azure-speech-ai-platform.onrender.com](https://azure-speech-ai-platform.onrender.com)
+- **Production Platform**: [https://azure-speech-ai-platform.vercel.app/](https://azure-speech-ai-platform.vercel.app/)
+- **API Microservice**: [https://azure-speech-ai-platform.onrender.com](https://azure-speech-ai-platform.onrender.com)
 
 ---
 
