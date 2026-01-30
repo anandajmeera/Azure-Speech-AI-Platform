@@ -63,11 +63,13 @@ window.toggleAuth = (mode) => {
     const subtitle = document.getElementById('auth-subtitle');
     const slider = document.getElementById('tab-slider');
     const error = document.getElementById('auth-error');
+    const hint = document.getElementById('password-hint');
 
     if (title) title.innerText = mode === 'login' ? 'Welcome Back' : 'Join VoiceFlow';
     if (subtitle) subtitle.innerText = mode === 'login' ? 'Log in to sync your transcription workspace.' : 'Create an account to start saving live sessions.';
     if (error) error.innerText = '';
     if (slider) slider.style.transform = mode === 'login' ? 'translateX(0)' : 'translateX(calc(100% + 0px))';
+    if (hint) hint.style.display = mode === 'login' ? 'none' : 'block';
 
     const tabs = document.querySelectorAll('.auth-tabs button');
     if (tabs.length >= 2) {
