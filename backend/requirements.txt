@@ -1,0 +1,10 @@
+flask
+flask-socketio
+azure-cognitiveservices-speech
+python-dotenv
+eventlet
+flask-sqlalchemy
+werkzeug
+openai
+flask-cors
+gunicorn
