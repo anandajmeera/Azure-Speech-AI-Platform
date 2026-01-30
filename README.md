@@ -15,6 +15,13 @@ VoiceFlow is a high-performance, full-stack application engineered for real-time
 
 ---
 
+## 🔗 Live Links
+
+- **Frontend (Live Demo)**: [https://azure-speech-ai-platform.vercel.app/](https://azure-speech-ai-platform.vercel.app/)
+- **Backend (API Service)**: [https://azure-speech-ai-platform.onrender.com](https://azure-speech-ai-platform.onrender.com)
+
+---
+
 ## 🛠️ Architecture & Tech Stack
 
 - **Frontend**: Vanilla ES6+ JavaScript, HTML5, CSS3 Glassmorphism, Web Audio API.
