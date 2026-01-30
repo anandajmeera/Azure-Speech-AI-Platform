@@ -200,6 +200,9 @@ def summarize():
         return jsonify({'message': 'Text too short'}), 400
 
     try:
+        if not OPENAI_API_KEY or OPENAI_API_KEY == "your_openai_api_key":
+            raise ValueError("Direct to fallback")
+
         client = OpenAI(api_key=OPENAI_API_KEY)
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -211,7 +214,19 @@ def summarize():
         summary = response.choices[0].message.content
         return jsonify({'summary': summary})
     except Exception as e:
-        return jsonify({'message': 'AI Summarization failed'}), 500
+        # PROFESSIONAL FALLBACK: Rule-based intelligent extraction
+        sentences = text.split('. ')
+        if len(sentences) <= 2:
+            summary = "• " + text
+        else:
+            summary = "• " + sentences[0] + ".\n• " + sentences[-1]
+            if len(sentences) > 3:
+                summary = "• Key Point: " + sentences[1] + ".\n" + summary
+        
+        return jsonify({
+            'summary': f"**Note: Using local processing mode**\n\n{summary}",
+            'fallback': True
+        })
 
 recognizers = {}
 
