@@ -120,6 +120,11 @@ socket.on('connect', () => {
     if (statusText) statusText.innerText = 'Connected';
 });
 
+socket.on('disconnect', () => {
+    if (statusDot) statusDot.className = 'dot error';
+    if (statusText) statusText.innerText = 'Server connection lost';
+});
+
 // Speech Recognition
 let recognition = null;
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -176,7 +181,13 @@ async function startRecording() {
         statusDot.className = 'dot recording'; statusText.innerText = 'Listening...';
         if (transcriptionDisplay.querySelector('.placeholder-text')) transcriptionDisplay.innerHTML = '';
         drawVisualizer();
-    } catch (err) { alert('Mic access denied. Ensure you are on HTTPS.'); }
+    } catch (err) {
+        console.error(err);
+        const msg = err.name === 'NotAllowedError' ? 'Microphone access denied' : 'Mic error occurred';
+        statusDot.className = 'dot error';
+        statusText.innerText = msg;
+        alert(msg);
+    }
 }
 
 function stopRecording() {
@@ -246,7 +257,9 @@ if (clearBtn) clearBtn.addEventListener('click', () => {
 
 if (summarizeBtn) summarizeBtn.addEventListener('click', async () => {
     if (!finalTranscript.trim()) return;
-    summarizeBtn.innerText = '⌛...';
+    const originalContent = summarizeBtn.innerHTML;
+    summarizeBtn.innerHTML = '<span>⏳</span> Generating summary...';
+    summarizeBtn.disabled = true;
     try {
         const res = await fetch(`${BACKEND_URL}/summarize`, {
             method: 'POST',
@@ -259,7 +272,8 @@ if (summarizeBtn) summarizeBtn.addEventListener('click', async () => {
             summarySection.classList.remove('hidden');
         } else { alert('AI Summarization failed'); }
     } catch (e) { console.log(e); }
-    summarizeBtn.innerHTML = '<span>✨</span> Summarize';
+    summarizeBtn.innerHTML = originalContent;
+    summarizeBtn.disabled = false;
 });
 
 window.closeSummary = () => summarySection.classList.add('hidden');
@@ -296,12 +310,18 @@ function renderHistory() {
         historyList.innerHTML = '<div class="history-empty">No saved sessions</div>';
         return;
     }
-    historyList.innerHTML = sessions.map(s => `
-        <div class="history-item" onclick="loadSession(${s.id})">
-            <div class="hist-title">${s.title || 'Untitled Session'}</div>
-            <div class="hist-date">${s.date}</div>
-        </div>
-    `).join('');
+    historyList.innerHTML = sessions.map(s => {
+        const d = new Date(s.date);
+        const dateStr = !isNaN(d.getTime())
+            ? d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' · ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+            : s.date;
+        return `
+            <div class="history-item" onclick="loadSession(${s.id})">
+                <div class="hist-title">${s.title || 'Untitled Session'}</div>
+                <div class="hist-date">${dateStr}</div>
+            </div>
+        `;
+    }).join('');
 }
 window.loadSession = (id) => {
     const s = sessions.find(x => x.id === id);
