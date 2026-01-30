@@ -359,8 +359,12 @@ header {
     font-size: 0.9rem;
 }
 
-.language-selector select option {
-    background: var(--bg-dark);
+.language-selector select option,
+.translation-toggle select option {
+    background-color: #1e293b;
+    /* Solid dark blue-grey */
+    color: #ffffff;
+    padding: 10px;
 }
 
 .translation-toggle {
