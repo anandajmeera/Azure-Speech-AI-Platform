@@ -233,14 +233,59 @@ body {
     animation: move 15s infinite alternate-reverse;
 }
 
-@keyframes move {
+/* --- Dynamic Wave Background --- */
+.ocean-waves {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.05) 100%);
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.wave {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 15% 50%, rgba(34, 211, 238, 0.05), transparent 60%);
+    border-radius: 40%;
+    animation: waveRotation 15s infinite linear;
+    bottom: -150%;
+    left: -50%;
+}
+
+.wave:nth-child(2) {
+    background: radial-gradient(circle at 85% 50%, rgba(168, 85, 247, 0.05), transparent 60%);
+    animation-duration: 25s;
+    animation-direction: reverse;
+    opacity: 0.5;
+}
+
+@keyframes waveRotation {
     from {
-        transform: translate(0, 0);
+        transform: rotate(0deg);
     }
 
     to {
-        transform: translate(100px, 100px);
+        transform: rotate(360deg);
     }
+}
+
+.author-signature {
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+
+.author-name {
+    color: var(--primary);
+    font-weight: 700;
 }
 
 .container {
