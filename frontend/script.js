@@ -3,7 +3,8 @@ const BACKEND_URL = window.location.hostname === 'localhost' || window.location.
     : 'https://azure-speech-ai-platform.onrender.com';
 
 const socket = io(BACKEND_URL, {
-    transports: ['websocket', 'polling']
+    transports: ['websocket', 'polling'],
+    withCredentials: true
 });
 
 // UI Elements
@@ -25,6 +26,8 @@ const clearBtn = document.getElementById('clear-btn');
 const logoutBtn = document.getElementById('logout-btn');
 const authOverlay = document.getElementById('auth-overlay');
 const authForm = document.getElementById('auth-form');
+const authTitle = document.getElementById('auth-title');
+const authError = document.getElementById('auth-error');
 const displayUsername = document.getElementById('display-username');
 const translateToggle = document.getElementById('translate-toggle');
 const targetLanguageSelect = document.getElementById('target-language-select');
@@ -36,12 +39,7 @@ let interimTranscript = '';
 let finalTranslation = '';
 let isRecording = false;
 let sessions = [];
-
-// Audio Logic
-let globalStream = null;
-let audioContext = null;
-let analyser = null;
-let animationId = null;
+let authMode = 'login';
 
 // Initialize
 checkAuth();
@@ -56,6 +54,62 @@ async function checkAuth() {
         if (authOverlay) authOverlay.classList.remove('hidden');
     }
 }
+
+// Auth Tab Switching
+window.toggleAuth = (mode) => {
+    authMode = mode;
+    authTitle.innerText = mode === 'login' ? 'Welcome Back' : 'Create Account';
+    authError.innerText = '';
+
+    const tabs = document.querySelectorAll('.auth-tabs button');
+    tabs[0].className = mode === 'login' ? 'active' : '';
+    tabs[1].className = mode === 'register' ? 'active' : '';
+};
+
+// Auth Submission
+if (authForm) authForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const submitBtn = authForm.querySelector('button[type="submit"]');
+
+    submitBtn.innerText = 'Processing...';
+    submitBtn.disabled = true;
+    authError.innerText = '';
+
+    try {
+        const endpoint = authMode === 'login' ? '/login' : '/register';
+        const res = await fetch(`${BACKEND_URL}${endpoint}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            if (authMode === 'register') {
+                authError.style.color = '#10b981';
+                authError.innerText = 'Registration successful! logging in...';
+                setTimeout(() => {
+                    authMode = 'login';
+                    authForm.dispatchEvent(new Event('submit'));
+                }, 1000);
+            } else {
+                localStorage.setItem('voiceflow_user', data.username);
+                location.reload();
+            }
+        } else {
+            authError.style.color = '#ef4444';
+            authError.innerText = data.message || 'Authentication failed';
+        }
+    } catch (err) {
+        authError.innerText = 'Server unreachable. Check your connection.';
+    } finally {
+        submitBtn.innerText = 'Continue';
+        submitBtn.disabled = false;
+    }
+});
 
 // Socket Status
 socket.on('connect', () => {
@@ -207,21 +261,23 @@ if (summarizeBtn) summarizeBtn.addEventListener('click', async () => {
 
 window.closeSummary = () => summarySection.classList.add('hidden');
 
-// Auth & Sidebar
-if (authForm) authForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    localStorage.setItem('voiceflow_user', document.getElementById('username').value);
-    location.reload();
-});
-
+// Logic for Sidebar & Sessions
 if (startBtn) startBtn.addEventListener('click', startRecording);
 if (stopBtn) stopBtn.addEventListener('click', stopRecording);
-if (logoutBtn) logoutBtn.addEventListener('click', () => { localStorage.removeItem('voiceflow_user'); location.reload(); });
-if (newBtn) newBtn.addEventListener('click', () => { location.reload(); });
+if (logoutBtn) logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('voiceflow_user');
+    fetch(`${BACKEND_URL}/logout`, { method: 'POST' }).finally(() => location.reload());
+});
+if (newBtn) newBtn.addEventListener('click', () => {
+    finalTranscript = ''; finalTranslation = ''; interimTranscript = ''; updateDisplay();
+    summarySection.classList.add('hidden');
+});
 
 async function loadSessions() {
-    const res = await fetch(`${BACKEND_URL}/sessions`);
-    if (res.ok) { sessions = await res.json(); renderHistory(); }
+    try {
+        const res = await fetch(`${BACKEND_URL}/sessions`);
+        if (res.ok) { sessions = await res.json(); renderHistory(); }
+    } catch (e) { }
 }
 async function saveCurrentSession() {
     if (!finalTranscript.trim()) return;
@@ -234,7 +290,29 @@ async function saveCurrentSession() {
 }
 function renderHistory() {
     if (!historyList) return;
-    historyList.innerHTML = sessions.map(s => `<div class="history-item" onclick="loadSession(${s.id})" style="cursor:pointer; padding:10px; border-bottom:1px solid #222;"><div>${s.title || 'Session ' + s.id}</div><small style="color:grey">${s.date}</small></div>`).join('');
+    if (sessions.length === 0) {
+        historyList.innerHTML = '<div class="history-empty">No saved sessions</div>';
+        return;
+    }
+    historyList.innerHTML = sessions.map(s => `
+        <div class="history-item" onclick="loadSession(${s.id})">
+            <div class="hist-title">${s.title || 'Untitled Session'}</div>
+            <div class="hist-date">${s.date}</div>
+        </div>
+    `).join('');
 }
-window.loadSession = (id) => { const s = sessions.find(x => x.id === id); if (s) { finalTranscript = s.text; finalTranslation = s.translation; updateDisplay(); } };
+window.loadSession = (id) => {
+    const s = sessions.find(x => x.id === id);
+    if (s) {
+        finalTranscript = s.text;
+        finalTranslation = s.translation || '';
+        if (s.summary) {
+            summaryContent.innerHTML = s.summary.replace(/\n/g, '<br>');
+            summarySection.classList.remove('hidden');
+        } else {
+            summarySection.classList.add('hidden');
+        }
+        updateDisplay();
+    }
+};
 if (translateToggle) translateToggle.addEventListener('change', () => targetLanguageSelect.disabled = !translateToggle.checked);
