@@ -1,8 +1,10 @@
 const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? ''
-    : 'https://speech-to-text-backend-anand.onrender.com'; // Replace this with your backend URL after deployment
+    ? 'http://127.0.0.1:5000'
+    : 'https://azure-speech-ai-platform.onrender.com';
 
-const socket = io(BACKEND_URL);
+const socket = io(BACKEND_URL, {
+    transports: ['websocket', 'polling']
+});
 
 // UI Elements
 const startBtn = document.getElementById('start-btn');
@@ -139,6 +141,7 @@ function updateDisplay() {
 }
 
 function drawVisualizer() {
+    if (!analyser) return;
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
     const draw = () => {
