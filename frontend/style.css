@@ -695,25 +695,36 @@ input:checked+.slider:before {
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
+#auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+}
+
 #auth-form input {
-    background: rgba(15, 23, 42, 0.5);
+    background: rgba(15, 23, 42, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 1rem 1.2rem;
+    padding: 1rem 1.25rem;
     border-radius: 14px;
     width: 100%;
     color: white;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .input-hint {
     font-size: 0.75rem;
     color: var(--text-secondary);
-    text-align: left;
-    margin-top: -0.5rem;
-    margin-bottom: 1rem;
     padding-left: 0.5rem;
-    display: block;
+    opacity: 0.8;
 }
 
 #auth-form input:focus {
@@ -723,11 +734,19 @@ input:checked+.slider:before {
     outline: none;
 }
 
+.w-full {
+    width: 100% !important;
+    justify-content: center;
+    padding: 1.1rem !important;
+    font-size: 1.1rem !important;
+    margin-top: 0.5rem;
+}
+
 .error-text {
     font-size: 0.85rem;
-    margin-top: 1rem;
     min-height: 1.2rem;
     color: var(--error);
+    margin-top: 0.5rem;
 }
 
 /* Summary Card */
