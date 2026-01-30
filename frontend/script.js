@@ -153,16 +153,22 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         }
         interimTranscript = interimText;
         if (translateToggle && translateToggle.checked && newFinalText) {
-            const translated = await doTranslate(newFinalText, targetLanguageSelect.value);
-            finalTranslation += translated + ' ';
+            const sourceLang = languageSelect.value.split('-')[0];
+            const targetLang = targetLanguageSelect.value;
+
+            // Only translate if languages are different
+            if (sourceLang !== targetLang) {
+                const translated = await doTranslate(newFinalText, sourceLang, targetLang);
+                finalTranslation += translated + ' ';
+            }
         }
         updateDisplay();
     };
 }
 
-async function doTranslate(text, lang) {
+async function doTranslate(text, source, target) {
     try {
-        const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${lang}`);
+        const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${source}|${target}`);
         const data = await res.json();
         return data.responseData.translatedText;
     } catch (e) { return "..."; }
