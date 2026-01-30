@@ -59,8 +59,15 @@ async function checkAuth() {
 // Fixed Toggle Logic
 window.toggleAuth = (mode) => {
     authMode = mode;
-    if (authTitle) authTitle.innerText = mode === 'login' ? 'Welcome Back' : 'Create Account';
-    if (authError) authError.innerText = '';
+    const title = document.getElementById('auth-title');
+    const subtitle = document.getElementById('auth-subtitle');
+    const slider = document.getElementById('tab-slider');
+    const error = document.getElementById('auth-error');
+
+    if (title) title.innerText = mode === 'login' ? 'Welcome Back' : 'Join VoiceFlow';
+    if (subtitle) subtitle.innerText = mode === 'login' ? 'Log in to sync your transcription workspace.' : 'Create an account to start saving live sessions.';
+    if (error) error.innerText = '';
+    if (slider) slider.style.transform = mode === 'login' ? 'translateX(0)' : 'translateX(calc(100% + 0px))';
 
     const tabs = document.querySelectorAll('.auth-tabs button');
     if (tabs.length >= 2) {
