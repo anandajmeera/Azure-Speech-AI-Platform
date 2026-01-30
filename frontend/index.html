@@ -31,8 +31,11 @@
             </div>
             <form id="auth-form">
                 <input type="text" id="username" placeholder="Username" required>
-                <input type="password" id="password" placeholder="Password" required>
-                <button type="submit" class="btn btn-primary w-full">Continue</button>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Password" required minlength="6">
+                    <p class="input-hint" id="password-hint">Minimum 6 characters</p>
+                </div>
+                <button type="submit" class="btn btn-primary w-full" id="auth-submit">Continue</button>
             </form>
             <p id="auth-error" class="error-text"></p>
             <div class="author-signature">Developed by <span class="author-name">Anand Kumar</span></div>

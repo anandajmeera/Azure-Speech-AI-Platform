@@ -83,8 +83,9 @@ if (authForm) authForm.addEventListener('submit', async (e) => {
     const password = document.getElementById('password').value;
     const submitBtn = authForm.querySelector('button[type="submit"]');
 
-    submitBtn.innerText = 'Connecting...';
+    submitBtn.innerText = authMode === 'login' ? 'Signing in...' : 'Creating Account...';
     submitBtn.disabled = true;
+    if (authError) authError.innerText = '';
 
     try {
         const timeout = new Promise((_, reject) => setTimeout(() => reject('timeout'), 4000));
@@ -101,7 +102,7 @@ if (authForm) authForm.addEventListener('submit', async (e) => {
             localStorage.setItem('voiceflow_user', username);
             location.reload();
         } else {
-            authError.innerText = data.message || 'Error occurred';
+            if (authError) authError.innerText = data.message || 'Authentication error';
         }
     } catch (err) {
         // FAIL-SAFE: If server is down, log in anyway for demo purposes
@@ -109,8 +110,10 @@ if (authForm) authForm.addEventListener('submit', async (e) => {
         localStorage.setItem('voiceflow_user', username + " (Guest)");
         location.reload();
     } finally {
-        submitBtn.innerText = 'Continue';
-        submitBtn.disabled = false;
+        if (submitBtn) {
+            submitBtn.innerText = 'Continue';
+            submitBtn.disabled = false;
+        }
     }
 });
 
