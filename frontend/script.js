@@ -53,6 +53,7 @@ async function checkAuth() {
         loadSessions();
     } else {
         if (authOverlay) authOverlay.classList.remove('hidden');
+        toggleAuth('login');
     }
 }
 
