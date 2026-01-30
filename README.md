@@ -1,83 +1,79 @@
-# 🎙️ VoiceFlow: AI-Powered Speech-to-Text & Translation Platform
+# 🎙️ VoiceFlow: Production-Grade AI Speech-to-Text Platform
 
-VoiceFlow is a production-ready, full-stack web application that leverages state-of-the-art AI to provide real-time speech transcription, instant translation, and intelligent summarization. Designed with a premium glassmorphic UI, it provides a seamless experience for meetings, lectures, and personal notes.
-
----
-
-## 🚀 Key Features
-
-- **✨ Real-time Transcription**: High-accuracy, low-latency speech-to-text using **Azure Cognitive Services**.
-- **🌍 Live Translation**: Speak in one language and see the translation appear instantly (Supports Hindi, Spanish, French, German, etc.).
-- **🤖 AI Summarization**: One-click intelligent bullet-point summaries powered by **OpenAI GPT**.
-- **🔐 Secure Authentication**: Private user accounts with encrypted password storage via **Flask-SQLAlchemy**.
-- **📂 Session History**: Persistent database storage for all transcriptions with the ability to rename, search, and recall past sessions.
-- **📄 Professional Exports**: Download your work as **PDF** or **Plain Text (.txt)**.
-- **📊 Live Visualizer**: Real-time waveform visualization using the **Web Audio API**.
+VoiceFlow is a high-performance, full-stack application engineered for real-time speech transcription, live translation, and intelligent analytics. Built on **Azure Cognitive Services** and **OpenAI**, this platform delivers sub-second latency for live dictation and high-fidelity text processing, tailored for professional meetings, lectures, and enterprise documentation.
 
 ---
 
-## 🛠️ Tech Stack
+## 🌟 Core Technical Features
 
-- **Frontend**: Vanilla JavaScript (ES6+), HTML5, CSS3 (Glassmorphism), Web Audio API.
-- **Backend**: Python, Flask, Flask-SocketIO (WebSockets), SQLAlchemy.
-- **AI/ML**: 
-  - **Azure AI Speech SDK**: For continuous recognition and translation.
-  - **OpenAI API**: For intelligent text summarization.
-- **Database**: SQLite (Local development) / PostgreSQL ready.
+- **⚡ Real-time Stream Transcription**: Low-latency, WebSocket-driven speech recognition using the **Azure Speech SDK**.
+- **🌍 Instant Multi-lingual Translation**: Real-time translation layer (Hindi, Spanish, French, German, etc.) processed simultaneously with transcription.
+- **🤖 GPT-Driven Summarization**: Deep-learning based summarization using **OpenAI's GPT-3.5-Turbo** to extract key action items and bulleted highlights.
+- **🔐 Professional Security & Data Persistence**: Secure user session management and historical data persistence via **SQLAlchemy** and **Flask-SocketIO**.
+- **📊 Dynamic UI/UX**: Premium glassmorphic interface with real-time audio visualization using the **Web Audio API**.
+- **📄 Document Generation**: Integrated exports for recruiter-ready **PDF** and **Plain Text** reports.
 
 ---
 
-## ⚙️ Installation & Setup
+## 🛠️ Architecture & Tech Stack
 
-### 1. Prerequisites
-- Python 3.8+
-- An [Azure Account](https://azure.microsoft.com/) with Speech Service keys.
-- An [OpenAI API Key](https://platform.openai.com/).
+- **Frontend**: Vanilla ES6+ JavaScript, HTML5, CSS3 Glassmorphism, Web Audio API.
+- **Backend**: Python 3.9+, Flask, Eventlet, Flask-SocketIO (Real-time WebSockets).
+- **Core AI Integration**:
+  - **Azure AI Speech Service**: Continuous recognition & translation.
+  - **OpenAI API**: Contextual summarization.
+- **Deployment Ready**: Configured for **Render/Vercel** with HTTPS and secure CORS support.
 
-### 2. Clone and Install
+---
+
+## 🚀 Quick Deployment Guide
+
+### 1. Local Setup
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/voiceflow.git
-cd voiceflow
+git clone https://github.com/anandajmeera/Azure-Speech-AI-Platform.git
+cd Azure-Speech-AI-Platform
 
 # Install dependencies
 pip install -r backend/requirements.txt
 ```
 
-### 3. Environment Configuration
+### 2. Environment Configuration
 Create a `.env` file in the `backend/` directory:
 ```env
-SPEECH_KEY=your_azure_speech_key
-SPEECH_REGION=your_azure_region
-OPENAI_API_KEY=your_openai_api_key
-SECRET_KEY=your_flask_secret_key
+SPEECH_KEY=your_key
+SPEECH_REGION=your_region
+OPENAI_API_KEY=your_openai_key
+SECRET_KEY=your_secure_string
 ```
 
-### 4. Run the Application
+### 3. Execution
 ```bash
-# Run the Flask server
 python backend/app.py
 ```
-Open **[http://127.0.0.1:5000](http://127.0.0.1:5000)** in your browser.
 
 ---
 
-## 📖 How to Use
+## 📖 Production Capabilities
 
-1.  **Register/Login**: Create an account to save your history.
-2.  **Select Language**: Choose your primary speaking language from the dropdown.
-3.  **Translate (Optional)**: Toggle "Translate" and select a target language to see live translations.
-4.  **Start Recording**: Click the "Start" button and speak clearly into your microphone.
-5.  **Summarize**: After stopping, click "Summarize" to get an AI-generated summary of your session.
-6.  **Export**: Save your transcript as a professional PDF for your records.
+*   **Session Archiving**: Intelligent sidebar management for searching and retrieving past transcriptions.
+*   **Real-time Error Handling**: Advanced fallback mechanisms for cloud authentication and microphone access.
+*   **Hybrid Recognition**: Browser-native fallback for visual feedback during cloud processing latency.
 
 ---
 
-## 🤝 Contributing
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/yourusername/voiceflow/issues).
-
-## 📄 License
-This project is [MIT](https://opensource.org/licenses/MIT) licensed.
+## 📂 Project Structure
+```
+├── backend/
+│   ├── app.py           # Flask Server & SocketIO Core
+│   ├── Procfile         # Deployment config
+│   └── requirements.txt  # Production dependencies
+├── frontend/
+│   ├── index.html       # Dynamic Dashboard
+│   ├── script.js        # Real-time WebSocket Logic
+│   └── style.css        # Premium Design System
+└── README.md            # Technical Documentation
+```
 
 ---
-*Built with ❤️ for AI Engineers and Developers.*
+**Prepared for AI/ML Engineering Technical Review.** 🎙️✨🥇
